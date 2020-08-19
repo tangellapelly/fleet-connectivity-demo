@@ -44,9 +44,9 @@
               >
             </div>
            
-            <div class="input-group input-group-lg">
+            <div class="input-group input-group-sm">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-lg">HERE API KEY</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">HERE API KEY</span>
                 </div>
                 <input type="text" class="form-control"   required id="here-api-key">
               </div>
@@ -63,10 +63,26 @@
           <div>
             <div class="form-group" style="text-align: center;top: 10px;position: relative;">
           <br>
-              <div class="input-group mb-2">
+          <div class="input-group mb-2">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-lg">Asset ID</span>
+            </div>
+            <input type="text" class="form-control"   required id="asset-id">
+          </div>
+          </div>
+          <div class="input-group mb-2">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-lg">Dispatcher ID</span>
+            </div>
+            <input type="text" class="form-control"   required id="dispatcher-id">
+          </div>
+          </div>
+          <div class="input-group mb-3">
                 <input type="text" id="here-api-key-driver" class="form-control" placeholder="Add your HERE API KEY" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <div class="input-group-append">
-                  <button class="btn btn-info" type="button"  onclick="getUpdates()" id="button-addon2">    Pull New Messages</button>
+                  <button class="btn btn-info" type="button"  onclick="getUpdates()" >    Pull New Messages</button>
                 </div>
               </div>
             </div>
@@ -138,8 +154,18 @@
             alert('API KEY is required..')
             return
         }
+        let assetID = document.getElementById('asset-id').value
+        if(!assetID){
+          alert('Asset ID is required..')
+          return
+        }
+        let dispatcherID = document.getElementById('dispatcher-id').value;
+        if(!dispatcherID){
+          alert('Dispatcher ID is required..')
+          return
+        }
         let hereApiKey = document.getElementById("here-api-key").value;
-        const url = `https://fce.ls.hereapi.com/1/assetupdate.json?apiKey=${driverApikey}&event={"asset_id":"polo-222","dispatcher_id":"vara-1"}`;
+        const url = `https://fce.ls.hereapi.com/1/assetupdate.json?apiKey=${driverApikey}&event={"asset_id":"${assetID}","dispatcher_id":"${dispatcherID}"}`;
         fetch(url)
           .then((response) => response.json())
           .then((data) => {

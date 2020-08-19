@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fleet Connectivity</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div class="main_header"></div>
+    <div class="container-fluid">
+        <div class="main_header">
+            <img src="herelogo.png" alt="here logo" width="100px" style="margin-bottom:20px;">
+            <p>Fleet Connectivity REST API Demo</p>
+        </div>
+      <div class="row">
+        <div class="col-sm-6" style="background-color: #f5f5f5; height: 900px">
+          <div class="header">
+            <h4>Control Center</h3>
+          </div>
+          <div>
+            <div class="form-group">
+              
+                <br><textarea class="form-control" id="myTextArea" rows="13" required>
+                  {
+                    "version" : "1.0",
+                    "job_id" : "12345",
+                    "dispatcher_id" : "Dispatcher-1",
+                    "type" : "NEW_DESTINATION",
+                    "asset_id" : "Asset-1",
+                    "message" :"This is an example job.",
+                    "content" : {
+                      "destination" : "52.53086,13.38469",
+                      "avoidAreas" : "50.145743,8.560077;50.139527,8.571493;",
+                      "mode" : "fastest,car,traffic:enabled"
+                     }
+                  }
+                    </textarea
+              >
+            </div>
+           
+            <div class="input-group input-group-lg">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-lg">HERE API KEY</span>
+                </div>
+                <input type="text" class="form-control"   required id="here-api-key">
+              </div>
+              <br>
+              <button type="button" onclick="sendJob()" class="btn btn-info btn-lg btn-block">Assign Job</button>
+          </div>
+          
+        </div>
+
+        <div class="col-sm-6" style="background-color: #f5f5f5;height: 900px;">
+          <div class="header">
+            <h4>Driver Module</h3>
+          </div>
+          <div>
+            <div class="form-group" style="text-align: center;top: 10px;position: relative;">
+          <br>
+              <div class="input-group mb-2">
+                <input type="text" id="here-api-key-driver" class="form-control" placeholder="Add your HERE API KEY" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-info" type="button"  onclick="getUpdates()" id="button-addon2">    Pull New Messages</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="driverMessage">
+              <table style="width: 100%;" id="display_job">
+                <header>
+                <tr>
+                  <th>
+                    Job ID
+                  </th>
+                  <th>
+                    Dispatcher ID
+                  </th>
+                  <th>
+                    Messages
+                  </th>
+                  <th>
+                    Action
+                  </th>
+                </tr>
+            </header>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      () => {
+        var ugly = document.getElementById("myTextArea").value;
+        var obj = JSON.parse(ugly);
+        var pretty = JSON.stringify(obj, undefined, 2);
+        document.getElementById("myTextArea").value = pretty;
+      };
+      const sendJob = () => {
+        let hereApiKey = document.getElementById("here-api-key").value;
+            if(!hereApiKey){
+                alert('API KEY is required..')
+                return
+            }
+         document.getElementById("here-api-key-driver").value = hereApiKey;   
+        let payload = document.getElementById("myTextArea").value;
+        const url =
+          `https://fce.ls.hereapi.com/1/sendjob.json?apiKey=${hereApiKey}`;
+
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify(JSON.parse(payload)),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log("Success:", result);
+            if (result.issues) {
+              alert(result.issues[0].message);
+            }
+            if(result.error){
+                alert(result.error_description)
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
+
+      const getUpdates = () => {
+        let driverApikey = document.getElementById("here-api-key-driver").value;   
+        if(!driverApikey){
+            alert('API KEY is required..')
+            return
+        }
+        let hereApiKey = document.getElementById("here-api-key").value;
+        const url = `https://fce.ls.hereapi.com/1/assetupdate.json?apiKey=${driverApikey}&event={"asset_id":"polo-222","dispatcher_id":"vara-1"}`;
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            if(data.error){
+                alert(data.error_description)
+                return
+            }
+            cleanTable();
+            data.jobs.map((job,index) => {
+              addRow(job);
+              console.log(job)
+            });
+          });
+      };
+
+        const cleanTable = () =>{
+            let table = document.getElementById("display_job");
+            for(var i = table.rows.length; i > 1;i--)
+                table.deleteRow(i -1);
+        }
+      const addRow = (job) => {
+        
+        let table = document.getElementById("display_job");
+        let row = table.insertRow(1);
+        let job_id = row.insertCell(0);
+        let dispatcher_id = row.insertCell(1);
+        let message = row.insertCell(2);
+        let action = row.insertCell(3);
+
+        job_id.innerHTML = job.job_id;
+        dispatcher_id.innerHTML = job.dispatcher_id;
+        message.innerHTML = job.message;
+        action.innerHTML = `<button type="button" class="btn btn-info">Action</button>`;
+
+      };
+
+    </script>
+  </body>
+</html>

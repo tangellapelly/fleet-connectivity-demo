@@ -16,10 +16,14 @@
     <div class="main_header"></div>
     <div class="container-fluid">
         <div class="main_header">
-            <img src="herelogo.png" alt="here logo" width="100px" style="margin-bottom:20px;">
+            <img src="here_logo.webp" alt="here logo" width="100px" style="margin-bottom:20px;">
             <p>Fleet Connectivity REST API Demo</p>
         </div>
+        <div style="padding-top:20px;text-align: center;padding-left: 8px;">
+          <p>(Still thinking about the text here)For this area here, we need to have some sort of introductory text that introduces the demo and what the user will be able to get out of it. Also please make sure to tell them that they need an API Key.</p>
+        </div>
       <div class="row">
+       
         <div class="col-sm-6" style="background-color: #f5f5f5; height: 900px">
           <div class="header">
             <h4>Control Center</h3>
@@ -27,7 +31,7 @@
          
           <div>
             <div style="padding-top:20px;text-align: center;">
-              <p> From the Control Center we can assign jobs to assets</p>
+              <p> The Control Center represents a developer-friendly way to customize and dispatch messages to an asset. Here you can change the JSON object below to send messages to an asset.</p>
               </div>
             <div class="form-group">
               
@@ -66,7 +70,7 @@
             <h4>Driver Module</h3>
           </div>
           <div style="padding-top:20px;text-align: center;">
-            <p> Here you will recieve messages(Jobs) from Control Center</p>
+            <p> The Driver Module, continually polls for updates and messages from the HERE API. Once it receives a request from the Dispatcher through the Control Center, the driver can react to the message through this interface. In a real application, you would see Driver-Friendly UI/UX</p>
             </div>
           <div>
             <div class="form-group" style="text-align: center;top: 10px;position: relative;">
@@ -76,7 +80,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="inputGroup-sizing-lg">Asset ID</span>
             </div>
-            <input type="text" class="form-control"   required id="asset-id">
+            <input type="text" class="form-control"   value="Asset-1" required id="asset-id">
           </div>
           </div>
           <div class="input-group mb-2">
@@ -84,7 +88,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="inputGroup-sizing-lg">Dispatcher ID</span>
             </div>
-            <input type="text" class="form-control"   required id="dispatcher-id">
+            <input type="text" class="form-control"   value="Dispatcher-1" required id="dispatcher-id">
           </div>
           </div>
           <div class="input-group mb-3">

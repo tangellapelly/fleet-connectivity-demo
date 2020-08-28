@@ -27,6 +27,9 @@ const sendJob = () => {
       if (result.error) {
         alert(result.error_description);
       }
+      if (result.job_id){
+        alert(`Job has been assigned. Job ID: ${result.job_id}`)
+      }
     })
     .catch((error) => {
       console.error("Error:", error);

@@ -58,6 +58,9 @@ const getUpdates = () => {
         alert(data.error_description);
         return;
       }
+      if(data.jobs.length == 0){
+        alert('Looks like there no jobs assinged. Use the Control Panel to assign a Job.')
+      }
       cleanTable();
       data.jobs.map((job, index) => {
         addRow(job);
